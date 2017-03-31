@@ -95,8 +95,7 @@ filename，footer offset和BlockletIndex,
 
 <img src="media/2-5_3.png" width = "30%" alt="2-5_3" />
 
-2.6 **tablestatus 文件格式**
-
+2.6 **tablestatus 文件格式**<div id="2.6"/>
 tablestatus记录每次加载和合并的segment相关的信息（采用gson格式），包括加载时间,加载状态,segment名称，是否被删除以及合并入的segment名称等等。每次加载或合并完成后，重新生成tablestatusfile。
 
 <img src="media/2-6_1.png" width = "25%" alt="2-6_1" />
