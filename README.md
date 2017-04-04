@@ -12,15 +12,17 @@ Apache CarbonData源码阅读
 
    2.1 文件目录结构
 
-   2.2 Schema文件格式
+   2.2 文件内容详解
+   
+      2.2.1 Schema文件格式
 
-   2.3 carbondata文件格式
+      2.2.2 carbondata文件格式
 
-   2.4 carbonindex文件格式
+      2.2.3 carbonindex文件格式
 
-   2.5 dictionary 文件格式
+      2.2.4 dictionary 文件格式
 
-   2.6 tablestatus 文件格式
+      2.2.5 tablestatus 文件格式
 
 3. [integration模块](3-integration.md)
 
