@@ -57,7 +57,7 @@ schema文件内容如图2-2_1中TableInfo类所示:
 
 2.2.2 **carbondata文件格式**
 
-carbondata文件由多个blocklet和footer部分组成。blocklet是carbondata文件内部的数据集（默认配置是32万行）， 每个blocklet包含每个列的一个ColumnChunk Page，一个ColumnChunk可能包含多个DataChunk Page。
+carbondata文件由多个blocklet和footer部分组成。blocklet是carbondata文件内部的数据集（最新V3格式，默认配置是64MB）， 每个blocklet包含每个列的一个ColumnChunk，一个ColumnChunk可能包含一个或多个Column Page。
 
 carbondata文件目前支持V1，V2和V3版本，主要区别在于blocklet部分的变化，下面逐一介绍。
 
@@ -73,9 +73,9 @@ blocklet由所有列的ColumnChunk组成，一个列的ColumnChunk包括data chu
 <img src="media/2-3_2.png" width = "50%" alt="2-3_2" />
 
 V3:
-blocklet也是由所有列的ColumnChunk组成。变化的是一个ColumnChunk默认由10个ColumnChunk Page组成，ColumnChunk Page新增加了BlockletMinMaxIndex。
+blocklet也是由所有列的ColumnChunk组成。变化的是一个ColumnChunk默认由多个Column Page组成，Column Page新增加了BlockletMinMaxIndex。
 
-与V2相比: V2格式的blocklet数据量默认为120000行，而V3格式的blocklet数据量默认为320000行，同样大小的数据文件，footer部分索引元数据信息量进一步减少；同时V3格式新增page level的数据过滤，而且每个page数据量默认只有32000行，比V2格式的120000行少了很多，数据过滤的命中精度进一步提示，能过滤掉更多的数据。
+与V2相比: V2格式的blocklet数据量默认为120000行，而V3格式的blocklet数据量默认为64MB，同样大小的数据文件，footer部分索引元数据信息量可能进一步减少；同时V3格式新增page level的数据过滤，而且每个page数据量默认只有32000行，比V2格式的120000行少了很多，数据过滤的命中精度进一步提示，在解压数据之前，能过滤掉更多的数据。
 
 <img src="media/2-3_3.png" width = "50%" alt="2-3_3" />
 
