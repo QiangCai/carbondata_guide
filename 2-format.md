@@ -68,12 +68,12 @@ carbondata文件目前支持V1，V2和V3版本，主要区别在于blocklet部�
 <img src="media/2-3_1.png" width = "25%" alt="2-3_1" />
 
 V2:
-blocklet由所有列的ColumnChunk组成，一个列的ColumnChunk包括data chunk header，data page, RLE page和rowID page。由于ColumnChunk将column的3类Page数据聚集在了一起， 因此，能使用更少的reader完成column数据读取。由于header部分记录了全部page的长度信息，因此，footer部分只需记录ColumnChunk的offset和length，也减小了footer数据量。
+blocklet由所有列的ColumnChunk组成，一个列的ColumnChunk由一个ColumnPage组成，ColumnPage包括data chunk header，data page, RLE page和rowID page。由于ColumnChunk将column的3类Page数据聚集在了一起， 因此，能使用更少的reader完成column数据读取。由于header部分记录了全部page的长度信息，因此，footer部分只需记录ColumnChunk的offset和length，也减小了footer数据量。
 
 <img src="media/2-3_2.png" width = "50%" alt="2-3_2" />
 
 V3:
-blocklet也是由所有列的ColumnChunk组成。变化的是一个ColumnChunk默认由多个Column Page组成，Column Page新增加了BlockletMinMaxIndex。
+blocklet也是由所有列的ColumnChunk组成。变化的是一个ColumnChunk由一到多个Column Page组成，Column Page新增加了BlockletMinMaxIndex。
 
 与V2相比: V2格式的blocklet数据量默认为120000行，而V3格式的blocklet数据量默认为64MB，同样大小的数据文件，footer部分索引元数据信息量可能进一步减少；同时V3格式新增page level的数据过滤，而且每个page数据量默认只有32000行，比V2格式的120000行少了很多，数据过滤的命中精度进一步提示，在解压数据之前，能过滤掉更多的数据。
 
