@@ -6,7 +6,7 @@ Apache CarbonData源码阅读
 
 **目录**
 
-1. 源码目录
+1. [源码目录](1-module-outline.md)
 
 2. [format模块](2-format.md)
 
