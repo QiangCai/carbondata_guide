@@ -1,8 +1,8 @@
 Apache CarbonData源码阅读
 =========================
 
-源码：<https://github.com/apache/incubator-carbondata>
-
+源码：<https://github.com/apache/carbondata>
+版本：apache-carbondata-1.0.0-incubating
 
 **目录**
 
