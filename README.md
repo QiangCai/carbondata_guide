@@ -2,7 +2,7 @@ Apache CarbonData源码阅读
 =========================
 
 源码：<https://github.com/apache/incubator-carbondata>
-
+版本： 1.5.0
 
 **目录**
 
