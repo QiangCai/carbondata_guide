@@ -8,11 +8,11 @@ CarbonData数据存储在carbon.storelocation配置项指定的位置（在carbo
 
 <img src="media/2-1_1.png" width = "60%" alt="2-1_1" />
 
-1. carbon.store目录是CarbonData数据存储位置，其下有ModifiedTime.mdt文件和database目录（default database name：default）。ModifiedTime.mdt用文件的修改时间属性记录元数据的时间版本，在drop table和create table时，会更新文件的修改时间
+1. carbon.store目录是CarbonData数据存储位置，其下database目录（default database name：default）和_system目录(datamap元数据信息)。
 
-2. default目录下有属于该database的用户表目录（例如：user_table  ）。
+2. default目录下有属于该database的用户表目录（例如：carbon_table  ）。
 
-3. user_table目录下有Metadata目录和Fact目录
+3. carbon_table目录下有Metadata, Fact, LockFiles 以及datamap数据目录
     
 4. Metadata目录下存储schema文件，tablestatus和字典文件（包括.dict，.dictmeta和.sortindex）共三类元数据数据信息文件。
 
