@@ -1,0 +1,107 @@
+1. CREATE TABLE
+Create a table using carbondata data source.
+Example:
+create table if not exists lineitem
+(
+    l_orderkey int, 
+    l_partkey int,
+    l_suppkey string, 
+    l_linenumber int, 
+    l_quantity double,        
+    l_extendedprice double, 
+    l_discount double, 
+    l_tax double, 
+    l_returnflag string, 
+    l_linestatus string,
+    l_shipdate date, 
+    l_commitdate date,
+    l_receiptdate date,
+    l_shipinstruct string,
+    l_shipmode string, 
+    l_comment string
+)
+using carbondata
+
+OPTIONS
+Table options used to configure carbondata table
+1). SORT_SCOPE and SORT_COLUMNS 
+   a) SORT_SCOPE: NO_SORT, if full scan is the main scenario 
+   b) SORT_SCOPE: GLOBAL_SORT
+     1) if filter scan or point query is more important
+       SORT_COLUMNS: use filter columns. Better to put the column which most frequently used in the beginning.
+        Try to avoid to happen index skip scan.
+       Note: Fuzzy filtering query can only be prefix matching.
+     2) if sorted data can be better compressed
+       SORT_COLUMNS: use low cardinality columns. The column order is from low to high.
+        The sorted data of low cardinality columns can be better compressed. The threshold maybe 1000.
+2). LOCAL_DICTIONARY_ENABLE
+   Local dictionary can reduce the size of data files. It will improve the query performance because of the smaller IO. 
+   But data loading will use more resource and take more time(maybe 70%).
+3). CACHE_META_COLUMNS
+   The system will cache the min/max index of all columns by default.
+   Better to cache the column which used in the filter condition.
+4). GLOBAL_SORT_PARTITIONS
+   When SORT_SCOPE is GLOBAL_SORT, the task number of writting carbondata file is same with the partition number of input data by default.
+   If the input data have many partitions and each partition is small, it will lead to small file issue.
+   So better to use GLOBAL_SORT_PARTITIONS to control the task number.  Let the each partition can generate more than one big carbondata file.
+   For example:
+     ALTER TABLE lineitem SET TBLPROPERTIES('GLOBAL_SORT_PARTITIONS'='1')
+   
+PARTITIONED BY
+Partition the created table by the 'partitioned by' columns
+Example:
+create table if not exists p_lineitem
+(
+    l_orderkey int, 
+    l_partkey int,
+    l_suppkey string, 
+    l_linenumber int, 
+    l_quantity double,        
+    l_extendedprice double, 
+    l_discount double, 
+    l_tax double, 
+    l_returnflag string, 
+    l_linestatus string,
+    l_commitdate date,
+    l_receiptdate date,
+    l_shipinstruct string,
+    l_shipmode string, 
+    l_comment string,
+    l_shipdate date
+)
+using carbondata
+partitioned by (l_shipdate)
+
+Note:
+For GLOBAL_SORT, better to put all the partitioned columns in the begenning of SORT_COLUMNS and keep the order of the partitioned columns.
+During loading, it will sort data and shuffle same data of the partitioned columns into the same task. 
+
+2. Insert
+Insert the result set of a select statement into a table or a partition.
+Example:
+insert into lineitem select * from other_table1
+insert into p_lineitem partition(l_shipdate='2020-01-01') select * from other_table2
+
+3. Compaction
+Combine the smaller files of one or more segments into the bigger files of a single segment.
+If small file issue happened, compaction can optimize it.
+But compaction will take more resource, so better to avoid to compact large segments.
+Compaction Type:
+1) MINOR 
+   Merge by the number of segments.
+   If dataloading operations are regular, use it to auto merge segments after loading.
+   MINOR compaction will use a policy of two levels.
+   Better to finish the compaction by the first level, because the compaction of the second level will take much resource.
+2) MAJOR
+   Merge by the data size of segments. 
+   If loading are frequently and there are many small segment with different data size, better to use MAJOR compaction. 
+3) CUSTOM
+   Merge the specified segments
+Note: only support auto trigger MINOR compaction. 
+
+4. Update/Delete 
+Update/Delete the data in the table.
+Note: Update/Delete operations will impact the 
+1) Avoid frequent update operations
+2) Avoid update more than 20% of data
+
